@@ -39,6 +39,7 @@ mod transform_stream;
 
 use cfg_if::cfg_if;
 
+pub use self::base::Range;
 pub use self::rewriter::{
     rewrite_str, AsciiCompatibleEncoding, CommentHandler, DoctypeHandler, DocumentContentHandlers,
     ElementContentHandlers, ElementHandler, EndHandler, EndTagHandler, HandlerResult, HandlerTypes,

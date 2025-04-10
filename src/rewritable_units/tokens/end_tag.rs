@@ -3,6 +3,7 @@ use crate::base::Bytes;
 use crate::errors::RewritingError;
 use crate::html_content::{ContentType, StreamingHandler};
 use crate::rewritable_units::StringChunk;
+use crate::Range;
 use encoding_rs::Encoding;
 use std::fmt::{self, Debug};
 
@@ -14,6 +15,7 @@ pub struct EndTag<'i> {
     raw: Option<Bytes<'i>>,
     encoding: &'static Encoding,
     pub(crate) mutations: Mutations,
+    range: Range,
 }
 
 impl<'i> EndTag<'i> {
@@ -23,12 +25,14 @@ impl<'i> EndTag<'i> {
         name: Bytes<'i>,
         raw: Bytes<'i>,
         encoding: &'static Encoding,
+        range: Range,
     ) -> Token<'i> {
         Token::EndTag(EndTag {
             name,
             raw: Some(raw),
             encoding,
             mutations: Mutations::new(),
+            range,
         })
     }
 
@@ -151,6 +155,11 @@ impl<'i> EndTag<'i> {
             output_handler(b">");
         }
         Ok(())
+    }
+
+    #[inline]
+    pub fn range(&self) -> &Range {
+        &self.range
     }
 }
 

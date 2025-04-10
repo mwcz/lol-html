@@ -1,6 +1,6 @@
 use super::{Attribute, AttributeNameError, Attributes};
 use super::{Mutations, Serialize, Token};
-use crate::base::Bytes;
+use crate::base::{Bytes, Range};
 use crate::errors::RewritingError;
 use crate::html::Namespace;
 use crate::html_content::{ContentType, StreamingHandler};
@@ -19,6 +19,7 @@ pub struct StartTag<'i> {
     raw: Option<Bytes<'i>>,
     encoding: &'static Encoding,
     pub(crate) mutations: Mutations,
+    range: Range,
 }
 
 impl<'i> StartTag<'i> {
@@ -31,6 +32,7 @@ impl<'i> StartTag<'i> {
         self_closing: bool,
         raw: Bytes<'i>,
         encoding: &'static Encoding,
+        range: Range,
     ) -> Token<'i> {
         Token::StartTag(StartTag {
             name,
@@ -40,6 +42,7 @@ impl<'i> StartTag<'i> {
             raw: Some(raw),
             encoding,
             mutations: Mutations::new(),
+            range,
         })
     }
 
@@ -234,6 +237,11 @@ impl<'i> StartTag<'i> {
         &self,
     ) -> (&'i Bytes<'i>, &'i crate::parser::AttributeBuffer) {
         self.attributes.raw_attributes()
+    }
+
+    #[inline]
+    pub fn range(&self) -> &Range {
+        &self.range
     }
 }
 

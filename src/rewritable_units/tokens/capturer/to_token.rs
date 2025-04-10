@@ -48,6 +48,7 @@ impl ToToken for TagLexeme<'_> {
                     self_closing,
                     self.raw(),
                     encoding,
+                    self.raw_range(),
                 )
                 .into()
             }
@@ -58,7 +59,7 @@ impl ToToken for TagLexeme<'_> {
                 // NOTE: clear the flag once we've seen required end tag.
                 capture_flags.remove(TokenCaptureFlags::NEXT_END_TAG);
 
-                EndTag::new_token(self.part(name), self.raw(), encoding).into()
+                EndTag::new_token(self.part(name), self.raw(), encoding, self.raw_range()).into()
             }
             _ => ToTokenResult::None,
         }
