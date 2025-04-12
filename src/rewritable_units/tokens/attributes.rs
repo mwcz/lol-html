@@ -3,6 +3,7 @@ use crate::errors::RewritingError;
 use crate::html::escape_double_quotes_only;
 use crate::parser::AttributeBuffer;
 use crate::rewritable_units::Serialize;
+use crate::Range;
 use encoding_rs::Encoding;
 use std::cell::OnceCell;
 use std::fmt::{self, Debug};
@@ -40,6 +41,7 @@ pub struct Attribute<'i> {
     value: Bytes<'i>,
     raw: Option<Bytes<'i>>,
     encoding: &'static Encoding,
+    range: Option<Range>,
 }
 
 impl<'i> Attribute<'i> {
@@ -50,12 +52,14 @@ impl<'i> Attribute<'i> {
         value: Bytes<'i>,
         raw: Bytes<'i>,
         encoding: &'static Encoding,
+        range: Option<Range>,
     ) -> Self {
         Attribute {
             name,
             value,
             raw: Some(raw),
             encoding,
+            range,
         }
     }
 
@@ -95,6 +99,7 @@ impl<'i> Attribute<'i> {
             value: Bytes::from_str(value, encoding).into_owned(),
             raw: None,
             encoding,
+            range: None,
         })
     }
 
@@ -219,6 +224,7 @@ impl<'i> Attributes<'i> {
                     self.input.slice(a.value),
                     self.input.slice(a.raw_range),
                     self.encoding,
+                    Some(a.raw_range),
                 )
             })
             .collect()

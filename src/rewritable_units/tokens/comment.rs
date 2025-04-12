@@ -3,6 +3,7 @@ use crate::base::Bytes;
 use crate::errors::RewritingError;
 use crate::html_content::StreamingHandler;
 use crate::rewritable_units::StringChunk;
+use crate::Range;
 use encoding_rs::Encoding;
 use std::any::Any;
 use std::fmt::{self, Debug};
@@ -31,6 +32,7 @@ pub struct Comment<'i> {
     encoding: &'static Encoding,
     mutations: Mutations,
     user_data: Box<dyn Any>,
+    range: Range,
 }
 
 impl<'i> Comment<'i> {
@@ -40,6 +42,7 @@ impl<'i> Comment<'i> {
         text: Bytes<'i>,
         raw: Bytes<'i>,
         encoding: &'static Encoding,
+        range: Range,
     ) -> Token<'i> {
         Token::Comment(Comment {
             text,
@@ -47,6 +50,7 @@ impl<'i> Comment<'i> {
             encoding,
             mutations: Mutations::new(),
             user_data: Box::new(()),
+            range,
         })
     }
 

@@ -4,6 +4,7 @@ use crate::errors::RewritingError;
 use crate::html::TextType;
 use crate::html_content::{ContentType, StreamingHandler};
 use crate::rewritable_units::StringChunk;
+use crate::Range;
 use encoding_rs::Encoding;
 use std::any::Any;
 use std::borrow::Cow;
@@ -67,6 +68,7 @@ pub struct TextChunk<'i> {
     encoding: &'static Encoding,
     mutations: Mutations,
     user_data: Box<dyn Any>,
+    //range: Range,
 }
 
 impl<'i> TextChunk<'i> {
@@ -77,6 +79,7 @@ impl<'i> TextChunk<'i> {
         text_type: TextType,
         last_in_text_node: bool,
         encoding: &'static Encoding,
+        //range: Range,
     ) -> Token<'i> {
         Token::TextChunk(TextChunk {
             text: text.into(),
@@ -85,6 +88,7 @@ impl<'i> TextChunk<'i> {
             encoding,
             mutations: Mutations::new(),
             user_data: Box::new(()),
+            //range,
         })
     }
 
@@ -384,9 +388,13 @@ mod tests {
         use super::super::Token;
 
         let encoding = Encoding::for_label_no_replacement(b"utf-8").unwrap();
-        let Token::TextChunk(mut chunk) =
-            TextChunk::new_token("original text", TextType::PlainText, true, encoding)
-        else {
+        let Token::TextChunk(mut chunk) = TextChunk::new_token(
+            "original text",
+            TextType::PlainText,
+            true,
+            encoding,
+            //Range::default(),
+        ) else {
             unreachable!()
         };
 

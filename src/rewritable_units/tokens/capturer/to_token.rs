@@ -77,7 +77,7 @@ impl ToToken for NonTagContentLexeme<'_> {
             Some(NonTagContentTokenOutline::Comment(text))
                 if capture_flags.contains(TokenCaptureFlags::COMMENTS) =>
             {
-                Comment::new_token(self.part(text), self.raw(), encoding).into()
+                Comment::new_token(self.part(text), self.raw(), encoding, self.raw_range()).into()
             }
 
             Some(NonTagContentTokenOutline::Doctype {
@@ -93,6 +93,7 @@ impl ToToken for NonTagContentLexeme<'_> {
                 false, // removed
                 self.raw(),
                 encoding,
+                self.raw_range(),
             )
             .into(),
             _ => ToTokenResult::None,

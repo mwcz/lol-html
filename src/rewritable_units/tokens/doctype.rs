@@ -1,6 +1,7 @@
 use crate::base::Bytes;
 use crate::errors::RewritingError;
 use crate::rewritable_units::{Serialize, Token};
+use crate::Range;
 use encoding_rs::Encoding;
 use std::any::Any;
 use std::fmt::{self, Debug};
@@ -41,6 +42,7 @@ pub struct Doctype<'i> {
     raw: Bytes<'i>,
     encoding: &'static Encoding,
     user_data: Box<dyn Any>,
+    range: Range,
 }
 
 impl<'i> Doctype<'i> {
@@ -54,6 +56,7 @@ impl<'i> Doctype<'i> {
         removed: bool,
         raw: Bytes<'i>,
         encoding: &'static Encoding,
+        range: Range,
     ) -> Token<'i> {
         Token::Doctype(Doctype {
             name,
@@ -64,6 +67,7 @@ impl<'i> Doctype<'i> {
             raw,
             encoding,
             user_data: Box::new(()),
+            range,
         })
     }
 
