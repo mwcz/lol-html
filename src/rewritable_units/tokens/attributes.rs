@@ -129,6 +129,11 @@ impl<'i> Attribute<'i> {
         self.value = Bytes::from_str(value, self.encoding).into_owned();
         self.raw = None;
     }
+
+    #[inline]
+    pub fn range(&self) -> Option<Range> {
+        self.range
+    }
 }
 
 impl Serialize for &Attribute<'_> {
@@ -152,6 +157,7 @@ impl Debug for Attribute<'_> {
         f.debug_struct("Attribute")
             .field("name", &self.name())
             .field("value", &self.value())
+            .field("range", &self.range())
             .finish()
     }
 }

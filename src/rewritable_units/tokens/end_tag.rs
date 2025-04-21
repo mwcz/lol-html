@@ -170,6 +170,7 @@ impl Debug for EndTag<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("EndTag")
             .field("name", &self.name())
+            .field("range", &self.range())
             .finish()
     }
 }

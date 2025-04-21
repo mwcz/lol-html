@@ -15,11 +15,10 @@ fn main() {
         RewriteStrSettings {
             element_content_handlers: vec![element!("*", |el: &mut Element<'_, '_>| {
                 println!(
-                    "{}{} <{}> @ {:?}",
+                    "{}{} {:?}",
                     "  ".repeat(depth.load(Ordering::Acquire)),
                     depth.load(Ordering::Relaxed),
-                    el.start_tag().name(),
-                    el.start_tag().range()
+                    el.start_tag()
                 );
                 if el.can_have_content() {
                     depth.fetch_add(1, Ordering::Acquire);
@@ -30,11 +29,10 @@ fn main() {
                             depth.fetch_sub(1, Ordering::Acquire);
 
                             println!(
-                                "{}{} </{}> @ {:?}",
+                                "{}{} {:?}",
                                 "  ".repeat(depth.load(Ordering::Acquire)),
-                                depth.load(Ordering::Acquire),
-                                end.name(),
-                                end.range()
+                                depth.load(Ordering::Relaxed),
+                                end
                             );
                             Ok(())
                         }));

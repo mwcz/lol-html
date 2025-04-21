@@ -249,6 +249,11 @@ impl<'i> Comment<'i> {
         }
         Ok(())
     }
+
+    #[inline]
+    pub fn range(&self) -> Range {
+        self.range
+    }
 }
 
 impl_serialize!(Comment);
@@ -259,6 +264,7 @@ impl Debug for Comment<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Comment")
             .field("text", &self.text())
+            .field("range", &self.range())
             .finish()
     }
 }

@@ -254,6 +254,7 @@ impl Debug for StartTag<'_> {
             .field("name", &self.name())
             .field("attributes", &self.attributes())
             .field("self_closing", &self.self_closing)
+            .field("range", &self.range())
             .finish()
     }
 }

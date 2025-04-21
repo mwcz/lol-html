@@ -113,6 +113,11 @@ impl<'i> Doctype<'i> {
     pub fn removed(&self) -> bool {
         self.removed
     }
+
+    #[inline]
+    pub fn range(&self) -> &Range {
+        &self.range
+    }
 }
 
 impl_user_data!(Doctype<'_>);
@@ -136,6 +141,7 @@ impl Debug for Doctype<'_> {
             .field("system_id", &self.system_id())
             .field("force_quirks", &self.force_quirks)
             .field("removed", &self.removed)
+            .field("range", &self.range())
             .finish()
     }
 }
